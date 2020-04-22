@@ -66,9 +66,9 @@ namespace CafeWebApp.Web.Controllers
         public ActionResult AddtoCart(int Id)
         {
             Cart cart = new Cart();
-            var filterCart = db.Carts.Where(c => c.FoodId == Id).SingleOrDefault();
             var filterFood = db.Food.Where(f => f.FoodId == Id).SingleOrDefault();
             var userId = Convert.ToInt32(Session["UserId"]);
+            var filterCart = db.Carts.Where(c => c.UserId == userId && c.FoodId == Id).SingleOrDefault();
 
             if (filterCart != null)
             {
@@ -89,7 +89,8 @@ namespace CafeWebApp.Web.Controllers
         [HttpPost]
         public ActionResult UpdateCart(string Operator, int Id)
         {
-            var filterCart = db.Carts.Where(c => c.FoodId == Id).SingleOrDefault();
+            var userId = Convert.ToInt32(Session["UserId"]);
+            var filterCart = db.Carts.Where(c => c.FoodId == Id && c.UserId == userId).SingleOrDefault();
             var filterFood = db.Food.Where(f => f.FoodId == Id).SingleOrDefault();
 
             if (Operator == "+")
@@ -117,7 +118,8 @@ namespace CafeWebApp.Web.Controllers
         [HttpPost]
         public ActionResult RemoveCart(int Id)
         {
-            var filterCart = db.Carts.Where(c => c.FoodId == Id).SingleOrDefault();
+            var userId = Convert.ToInt32(Session["UserId"]);
+            var filterCart = db.Carts.Where(c => c.FoodId == Id && c.UserId == userId).SingleOrDefault();
             var filterFood = db.Food.Where(f => f.FoodId == Id).SingleOrDefault();
             db.Carts.Remove(filterCart);
             db.SaveChanges();
