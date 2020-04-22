@@ -1,0 +1,98 @@
+﻿@model IEnumerable<CafeWebApp.Web.Models.Cart>
+
+@{
+    Layout = "~/Views/Shared/CustomerLayout.cshtml";
+}
+
+@{
+    ViewBag.Title = "Cartlist";
+}
+
+<h2>My Order</h2>
+
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.ActionLink("Confirm Order", "AddtoTable")
+        </th>
+    </tr>
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.FoodName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.FoodQuantity)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.TotalAmount)
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.FoodName)
+            </td>
+            <td>
+                <button type="button" class="operatorBtn" value="+" id="@item.FoodId">+</button>
+                @Html.DisplayFor(modelItem => item.FoodQuantity)
+                <button type="button" class="operatorBtn" value="-" id="@item.FoodId">-</button>
+            </td>
+            <td>
+                RM @Html.DisplayFor(modelItem => item.TotalAmount)
+            </td>
+            <td>
+                <button type="button" class="deleteBtn" id="@item.FoodId">x</button>
+            </td>
+        </tr>
+    }
+    
+    <tr>
+        <td></td>
+        <td></td>
+        <td>
+            RM @Model.Sum(item => item.TotalAmount)
+        </td>
+        <td></td>
+    </tr>
+
+
+</table>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        $(".operatorBtn").click(function () {
+            var selectedOperator = $(this).attr("value");
+            var selectedId = $(this).attr("id")
+            $.ajax({
+                type: "POST",
+                url: "/Customer/UpdateCart",
+                data: { Operator: selectedOperator, Id: selectedId },
+                success: function () {
+                    location.reload();
+                }
+            })
+        })
+    })
+
+    $(document).ready(function () {
+        $(".deleteBtn").click(function () {
+            var selectedId = $(this).attr("id")
+            $.ajax({
+                type: "POST",
+                url: "/Customer/RemoveCart",
+                data: { Id: selectedId },
+                success: function () {
+                    location.reload();
+                }
+            })
+        })
+    })
+
+    
+</script>

@@ -1,0 +1,44 @@
+﻿@model IEnumerable<CafeWebApp.Web.Models.Table>
+@{
+    Layout = "~/Views/Shared/CashierLayout.cshtml";
+}
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.User.Username)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.TableStatus)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.TableNumber)
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.User.Username)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TableStatus)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TableNumber)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = item.TableId }) |
+                @Html.ActionLink("Details", "Details", new { id = item.TableId }) |
+                @Html.ActionLink("Delete", "Delete", new { id = item.TableId })
+            </td>
+        </tr>
+    }
+
+</table>

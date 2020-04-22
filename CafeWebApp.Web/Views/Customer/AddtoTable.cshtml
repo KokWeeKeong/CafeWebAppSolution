@@ -1,0 +1,48 @@
+﻿@model CafeWebApp.Web.Models.Table
+
+@{
+    Layout = "~/Views/Shared/CustomerLayout.cshtml";
+}
+
+@{
+    ViewBag.Title = "AddtoTable";
+}
+
+<h2>Confirm Order</h2>
+
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+
+        <hr />
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.TableNumber, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.TableNumber, new { htmlAttributes = new { @class = "form-control", @name = "tableNumber", min = 1, max = 10 } })
+                @Html.ValidationMessageFor(model => model.TableNumber, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Confirm" class="btn btn-default" />
+            </div>
+        </div>
+
+        <div class="alert-info text-center">
+            @ViewBag.Msg
+        </div>
+    </div>
+}
+
+<div>
+    @Html.ActionLink("Back to Food Menu", "FoodMenu")
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

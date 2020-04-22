@@ -1,0 +1,63 @@
+﻿@model IEnumerable<CafeWebApp.Web.Models.Food>
+
+@{
+    Layout = "~/Views/Shared/CustomerLayout.cshtml";
+}
+
+@{
+    ViewBag.Title = "FoodMenu";
+}
+
+<h2>Menu</h2>
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.FoodName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.FoodPrice)
+        </th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @*@Html.DisplayFor(modelItem => item.FoodName)*@
+                <div class="btn" id="@item.FoodId">@Html.ActionLink(item.FoodName, "AddtoCart", new { id = item.FoodId })</div>
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FoodPrice)
+            </td>
+            <td>
+                @*//<button class="btn" id="@item.FoodId">Add to Cart</button>*@
+                @*<div class="btn" id="@item.FoodId">@Html.ActionLink(item.FoodName, "FoodMenu", new { id = item.FoodId })</div>*@
+            </td>
+        </tr>
+    }
+
+</table>
+
+<div class="alert-info text-center">
+    @ViewBag.Msg
+</div>
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        $(".btn").click(function () {
+            var selectedId = $(this).attr("id");
+            $.ajax({
+                type: "POST",
+                url: "/Customer/AddtoCart",
+                data: { Id: selectedId },
+                success: function (response) {
+                    document.getElementById('message').innerHTML = response;
+                }
+            })
+        })
+    })
+</script>

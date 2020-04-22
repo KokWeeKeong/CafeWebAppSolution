@@ -1,0 +1,51 @@
+﻿@model IEnumerable<CafeWebApp.Web.Models.Food>
+
+@{
+    ViewBag.Title = "FoodMenu";
+}
+
+<h2>FoodMenu</h2>
+
+<p>
+    @Html.ActionLink("Create New", "FoodCreate")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Category)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.FoodName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.FoodPrice)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Remarks)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Category)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.FoodName)
+        </td>
+        <td>
+            RM @Html.DisplayFor(modelItem => item.FoodPrice)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Remarks)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "FoodEdit", new { id=item.FoodId }) |
+            @Html.ActionLink("Details", "FoodDetails", new { id=item.FoodId }) |
+            @Html.ActionLink("Delete", "FoodDelete", new { id=item.FoodId })
+        </td>
+    </tr>
+}
+
+</table>

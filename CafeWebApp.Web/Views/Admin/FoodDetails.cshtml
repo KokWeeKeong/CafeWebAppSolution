@@ -1,0 +1,50 @@
+﻿@model CafeWebApp.Web.Models.Food
+
+@{
+    ViewBag.Title = "FoodDetails";
+}
+
+<h2>FoodDetails</h2>
+
+<div>
+    <h4>Food</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Category)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Category)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.FoodName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.FoodName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.FoodPrice)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.FoodPrice)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Remarks)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Remarks)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "FoodEdit", new { id = Model.FoodId }) |
+    @Html.ActionLink("Back to List", "FoodMenu")
+</p>
