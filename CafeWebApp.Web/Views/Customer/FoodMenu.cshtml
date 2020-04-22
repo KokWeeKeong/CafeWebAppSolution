@@ -24,15 +24,13 @@
     {
         <tr>
             <td>
-                @*@Html.DisplayFor(modelItem => item.FoodName)*@
-                <div class="btn" id="@item.FoodId">@Html.ActionLink(item.FoodName, "AddtoCart", new { id = item.FoodId })</div>
+                <a href="#" onclick="AddCart(@item.FoodId)">@Html.DisplayFor(modelItem=>item.FoodName)</a>
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.FoodPrice)
+                RM @Html.DisplayFor(modelItem => item.FoodPrice)
             </td>
             <td>
-                @*//<button class="btn" id="@item.FoodId">Add to Cart</button>*@
-                @*<div class="btn" id="@item.FoodId">@Html.ActionLink(item.FoodName, "FoodMenu", new { id = item.FoodId })</div>*@
+                @*<button class="btn" id="@item.FoodId" >Add to Cart</button>*@
             </td>
         </tr>
     }
@@ -40,24 +38,23 @@
 </table>
 
 <div class="alert-info text-center">
-    @ViewBag.Msg
+    <div id="result"></div>
 </div>
 
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 
 <script>
-    $(document).ready(function () {
-        $(".btn").click(function () {
-            var selectedId = $(this).attr("id");
-            $.ajax({
-                type: "POST",
-                url: "/Customer/AddtoCart",
-                data: { Id: selectedId },
-                success: function (response) {
-                    document.getElementById('message').innerHTML = response;
-                }
-            })
+    function AddCart(foodId) {
+        $.ajax({
+            type: "POST",
+            url: "/Customer/AddtoCart",
+            data:{ Id: foodId },
+            success: function (response) {
+                $('#result').show();
+                document.getElementById('result').innerHTML = response.message;
+                $('#result').delay(5000).fadeOut('slow');
+            }
         })
-    })
+    }
 </script>

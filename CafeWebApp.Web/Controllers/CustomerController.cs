@@ -72,8 +72,6 @@ namespace CafeWebApp.Web.Controllers
 
             if (filterCart != null)
             {
-                //ViewBag.Msg = "This Food is already added";
-                //return Json(new { isUpdateSuccess = isSuccess, JsonRequestBehavior.AllowGet });
                 return Json(new { message = "this food is already added", JsonRequestBehavior.AllowGet });
             }
             else
