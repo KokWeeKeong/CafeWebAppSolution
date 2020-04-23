@@ -1,4 +1,8 @@
-﻿@model CafeWebApp.Web.Models.Table
+﻿@model CafeWebApp.DomainModelEntity.Table
+
+@{
+    Layout = "~/Views/Shared/CashierLayout.cshtml";
+}
 
 @{
     ViewBag.Title = "Details";
@@ -11,12 +15,12 @@
     <hr />
     <dl class="dl-horizontal">
         @*<dt>
-            @Html.DisplayNameFor(model => model.User.Username)
-        </dt>
+                @Html.DisplayNameFor(model => model.User.Username)
+            </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.User.Username)
-        </dd>*@
+            <dd>
+                @Html.DisplayFor(model => model.User.Username)
+            </dd>*@
 
         <dt>
             @Html.DisplayNameFor(model => model.TableStatus)

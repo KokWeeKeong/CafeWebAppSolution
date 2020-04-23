@@ -6,18 +6,21 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
-using CafeWebApp.Web.Models;
+using CafeWebApp.DomainModelEntity;
+using CafeWebApp.InfrastructurePersistence.Repositories;
 
 namespace CafeWebApp.Web.Controllers
 {
     public class CustomerController : Controller
     {
-        private AppDbContext db = new AppDbContext();
+        //private AppDbContext db = new AppDbContext();
+        private CustomerRepository customerRepo = new CustomerRepository();
 
         // GET: Customer
         public ActionResult FoodMenu()
         {
-            return View(db.Food.ToList());
+            //return View(db.Food.ToList());
+            return View(customerRepo.GetFoods());
         }
         public ActionResult LoginPage()
         {
@@ -26,7 +29,8 @@ namespace CafeWebApp.Web.Controllers
         [HttpPost]
         public ActionResult LoginPage(User user)
         {
-            var checkCustomer = db.User.Where(u => u.Username == user.Username && u.Roles == Roles.Customer).SingleOrDefault();
+            //var checkCustomer = db.User.Where(u => u.Username == user.Username && u.Roles == Roles.Customer).SingleOrDefault();
+            var checkCustomer = customerRepo.CheckCustomer(user);
 
             if (checkCustomer != null)
             {
@@ -55,7 +59,8 @@ namespace CafeWebApp.Web.Controllers
         public ActionResult Cartlist()
         {
             var Id = Convert.ToInt32(Session["UserId"]);
-            var filterCart = db.Carts.Where(c => c.UserId == Id).ToList();
+            //var filterCart = db.Carts.Where(c => c.UserId == Id).ToList();
+            var filterCart = customerRepo.CartList(Id);
             return View(filterCart);
         }
         public ActionResult AddtoTable()
@@ -66,9 +71,11 @@ namespace CafeWebApp.Web.Controllers
         public ActionResult AddtoCart(int Id)
         {
             Cart cart = new Cart();
-            var filterFood = db.Food.Where(f => f.FoodId == Id).SingleOrDefault();
+            //var filterFood = db.Food.Where(f => f.FoodId == Id).SingleOrDefault();
+            var filterFood = customerRepo.CheckFood(Id);
             var userId = Convert.ToInt32(Session["UserId"]);
-            var filterCart = db.Carts.Where(c => c.UserId == userId && c.FoodId == Id).SingleOrDefault();
+            //var filterCart = db.Carts.Where(c => c.UserId == userId && c.FoodId == Id).SingleOrDefault();
+            var filterCart = customerRepo.CheckCart(userId, Id);
 
             if (filterCart != null)
             {
@@ -81,8 +88,9 @@ namespace CafeWebApp.Web.Controllers
                 cart.TotalAmount = filterFood.FoodPrice;
                 cart.FoodQuantity = 1;
                 cart.UserId = userId;
-                db.Carts.Add(cart);
-                db.SaveChanges();
+                //db.Carts.Add(cart);
+                //db.SaveChanges();
+                customerRepo.AddCart(cart);
                 return Json(new { message = "Food added to cartlist", JsonRequestBehavior.AllowGet });
             }
         }
@@ -90,14 +98,17 @@ namespace CafeWebApp.Web.Controllers
         public ActionResult UpdateCart(string Operator, int Id)
         {
             var userId = Convert.ToInt32(Session["UserId"]);
-            var filterCart = db.Carts.Where(c => c.FoodId == Id && c.UserId == userId).SingleOrDefault();
-            var filterFood = db.Food.Where(f => f.FoodId == Id).SingleOrDefault();
+            //var filterCart = db.Carts.Where(c => c.FoodId == Id && c.UserId == userId).SingleOrDefault();
+            //var filterFood = db.Food.Where(f => f.FoodId == Id).SingleOrDefault();
+            var filterCart = customerRepo.CheckCart(userId, Id);
+            var filterFood = customerRepo.CheckFood(Id);
 
             if (Operator == "+")
             {
                 filterCart.FoodQuantity++;
                 filterCart.TotalAmount = filterCart.FoodQuantity * filterFood.FoodPrice;
-                db.SaveChanges();
+                //db.SaveChanges();
+                customerRepo.Save();
                 return Json(JsonRequestBehavior.AllowGet);
             }
             else
@@ -110,7 +121,8 @@ namespace CafeWebApp.Web.Controllers
                 {
                     filterCart.FoodQuantity--;
                     filterCart.TotalAmount = filterCart.FoodQuantity * filterFood.FoodPrice;
-                    db.SaveChanges();
+                    //db.SaveChanges();
+                    customerRepo.Save();
                 }
                 return Json(JsonRequestBehavior.AllowGet);
             }
@@ -119,17 +131,21 @@ namespace CafeWebApp.Web.Controllers
         public ActionResult RemoveCart(int Id)
         {
             var userId = Convert.ToInt32(Session["UserId"]);
-            var filterCart = db.Carts.Where(c => c.FoodId == Id && c.UserId == userId).SingleOrDefault();
-            var filterFood = db.Food.Where(f => f.FoodId == Id).SingleOrDefault();
-            db.Carts.Remove(filterCart);
-            db.SaveChanges();
+            //var filterCart = db.Carts.Where(c => c.FoodId == Id && c.UserId == userId).SingleOrDefault();
+            //var filterFood = db.Food.Where(f => f.FoodId == Id).SingleOrDefault();
+            var filterCart = customerRepo.CheckCart(userId, Id);
+            //var filterFood = customerRepo.CheckFood(Id);
+            //db.Carts.Remove(filterCart);
+            //db.SaveChanges();
+            customerRepo.RemoveCart(filterCart);
             return Json(JsonRequestBehavior.AllowGet);
         }
         [HttpPost]
         public ActionResult AddtoTable(int tableNumber)
         {
             var userId = Convert.ToInt32(Session["UserId"]);
-            var filterTable = db.Table.Where(t => t.TableNumber == tableNumber).SingleOrDefault();
+            //var filterTable = db.Table.Where(t => t.TableNumber == tableNumber).SingleOrDefault();
+            var filterTable = customerRepo.CheckTable(tableNumber);
 
             if (filterTable.TableStatus == TableStatus.Occupied)
             {
@@ -143,8 +159,9 @@ namespace CafeWebApp.Web.Controllers
                     filterTable.TableNumber = tableNumber;
                     filterTable.TableStatus = TableStatus.Occupied;
                     filterTable.UserId = userId;
-                    db.Entry(filterTable).State = EntityState.Modified;
-                    db.SaveChanges();
+                    //db.Entry(filterTable).State = EntityState.Modified;
+                    //db.SaveChanges();
+                    customerRepo.UpdateTable(filterTable);
                     ViewBag.Msg = "Place Order Succesful";
                     return View();
                 }
@@ -158,7 +175,8 @@ namespace CafeWebApp.Web.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Food food = db.Food.Find(id);
+            //Food food = db.Food.Find(id);
+            Food food = customerRepo.GetFood(id);
             if (food == null)
             {
                 return HttpNotFound();
@@ -181,8 +199,8 @@ namespace CafeWebApp.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.Food.Add(food);
-                db.SaveChanges();
+                //db.Food.Add(food);
+                //db.SaveChanges();
                 return RedirectToAction("Index");
             }
 
@@ -196,7 +214,8 @@ namespace CafeWebApp.Web.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Food food = db.Food.Find(id);
+            //Food food = db.Food.Find(id);
+            Food food = customerRepo.GetFood(id);
             if (food == null)
             {
                 return HttpNotFound();
@@ -213,8 +232,8 @@ namespace CafeWebApp.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.Entry(food).State = EntityState.Modified;
-                db.SaveChanges();
+               // db.Entry(food).State = EntityState.Modified;
+               //db.SaveChanges();
                 return RedirectToAction("Index");
             }
             return View(food);
@@ -227,7 +246,8 @@ namespace CafeWebApp.Web.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Food food = db.Food.Find(id);
+            //Food food = db.Food.Find(id);
+            Food food = customerRepo.GetFood(id);
             if (food == null)
             {
                 return HttpNotFound();
@@ -240,9 +260,9 @@ namespace CafeWebApp.Web.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            Food food = db.Food.Find(id);
-            db.Food.Remove(food);
-            db.SaveChanges();
+            //Food food = db.Food.Find(id);
+            //db.Food.Remove(food);
+            //db.SaveChanges();
             return RedirectToAction("Index");
         }
 
@@ -250,7 +270,7 @@ namespace CafeWebApp.Web.Controllers
         {
             if (disposing)
             {
-                db.Dispose();
+                //db.Dispose();
             }
             base.Dispose(disposing);
         }

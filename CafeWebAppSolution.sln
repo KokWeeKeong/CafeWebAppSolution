@@ -5,6 +5,10 @@ VisualStudioVersion = 16.0.29926.136
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CafeWebApp.Web", "CafeWebApp.Web\CafeWebApp.Web.csproj", "{90F80992-FD20-4789-9C5C-9C69B521D747}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CafeWebApp.DomainModelEntity", "CafeWebApp.DomainModelEntity\CafeWebApp.DomainModelEntity.csproj", "{F53EB994-76A0-41F4-9186-CEBD2222B771}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CafeWebApp.InfrastructurePersistence", "CafeWebApp.InfrastructurePersistence\CafeWebApp.InfrastructurePersistence.csproj", "{C64875AB-4D6F-4448-AA47-DC8FB636344D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +19,14 @@ Global
 		{90F80992-FD20-4789-9C5C-9C69B521D747}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{90F80992-FD20-4789-9C5C-9C69B521D747}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{90F80992-FD20-4789-9C5C-9C69B521D747}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F53EB994-76A0-41F4-9186-CEBD2222B771}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F53EB994-76A0-41F4-9186-CEBD2222B771}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F53EB994-76A0-41F4-9186-CEBD2222B771}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F53EB994-76A0-41F4-9186-CEBD2222B771}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C64875AB-4D6F-4448-AA47-DC8FB636344D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C64875AB-4D6F-4448-AA47-DC8FB636344D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C64875AB-4D6F-4448-AA47-DC8FB636344D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C64875AB-4D6F-4448-AA47-DC8FB636344D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

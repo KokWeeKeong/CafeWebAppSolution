@@ -6,13 +6,16 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
-using CafeWebApp.Web.Models;
+using CafeWebApp.DomainModelEntity;
+using CafeWebApp.InfrastructurePersistence.Repositories;
 
 namespace CafeWebApp.Web.Controllers
 {
     public class CashierController : Controller
     {
-        private AppDbContext db = new AppDbContext();
+        //private AppDbContext db = new AppDbContext();
+        private CashierRepository cashierRepo = new CashierRepository();
+        private AdminRepository adminRepo = new AdminRepository();
 
         public ActionResult LoginPage()
         {
@@ -21,7 +24,8 @@ namespace CafeWebApp.Web.Controllers
         [HttpPost]
         public ActionResult LoginPage(User user)
         {
-            var checkCashier = db.User.Where(u => u.Username == user.Username && u.Roles == Roles.Cashier).SingleOrDefault();
+            //var checkCashier = db.User.Where(u => u.Username == user.Username && u.Roles == Roles.Cashier).SingleOrDefault();
+            var checkCashier = cashierRepo.CheckCashier(user);
 
             if (checkCashier != null)
             {
@@ -50,8 +54,9 @@ namespace CafeWebApp.Web.Controllers
         // GET: Cashier
         public ActionResult Index()
         {
-            var table = db.Table.Include(t => t.User);
-            return View(table.ToList());
+            //var table = db.Table.Include(t => t.User);
+            //return View(table.ToList());
+            return View(cashierRepo.GetTables());
         }
 
         // GET: Cashier/Details/5
@@ -61,7 +66,8 @@ namespace CafeWebApp.Web.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Table table = db.Table.Find(id);
+            //Table table = db.Table.Find(id);
+            Table table = cashierRepo.GetTable(id);
             if (table == null)
             {
                 return HttpNotFound();
@@ -72,7 +78,7 @@ namespace CafeWebApp.Web.Controllers
         // GET: Cashier/Create
         public ActionResult Create()
         {
-            ViewBag.UserId = new SelectList(db.User, "Id", "Username");
+            //ViewBag.UserId = new SelectList(db.User, "Id", "Username");
             return View();
         }
 
@@ -85,12 +91,12 @@ namespace CafeWebApp.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.Table.Add(table);
-                db.SaveChanges();
+                //db.Table.Add(table);
+                //db.SaveChanges();
                 return RedirectToAction("Index");
             }
 
-            ViewBag.UserId = new SelectList(db.User, "Id", "Username", table.UserId);
+            //ViewBag.UserId = new SelectList(db.User, "Id", "Username", table.UserId);
             return View(table);
         }
 
@@ -101,12 +107,14 @@ namespace CafeWebApp.Web.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Table table = db.Table.Find(id);
+            //Table table = db.Table.Find(id);
+            Table table = cashierRepo.GetTable(id);
             if (table == null)
             {
                 return HttpNotFound();
             }
-            ViewBag.UserId = new SelectList(db.User, "Id", "Username", table.UserId);
+            //ViewBag.UserId = new SelectList(db.User, "Id", "Username", table.UserId);
+            ViewBag.UserId = new SelectList(adminRepo.GetUsers(), "Id", "Username", table.UserId);
             return View(table);
         }
 
@@ -119,11 +127,18 @@ namespace CafeWebApp.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.Entry(table).State = EntityState.Modified;
-                db.SaveChanges();
+                //db.Entry(table).State = EntityState.Modified;
+                //db.SaveChanges();
+                if (table.TableStatus == TableStatus.Empty)
+                {
+                    table.UserId = null;
+                }
+                cashierRepo.UpdateTable(table);
                 return RedirectToAction("Index");
+                
             }
-            ViewBag.UserId = new SelectList(db.User, "Id", "Username", table.UserId);
+            //ViewBag.UserId = new SelectList(db.User, "Id", "Username", table.UserId);
+            ViewBag.UserId = new SelectList(adminRepo.GetUsers(), "Id", "Username", table.UserId);
             return View(table);
         }
 
@@ -134,7 +149,8 @@ namespace CafeWebApp.Web.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Table table = db.Table.Find(id);
+            //Table table = db.Table.Find(id);
+            Table table = cashierRepo.GetTable(id);
             if (table == null)
             {
                 return HttpNotFound();
@@ -147,9 +163,11 @@ namespace CafeWebApp.Web.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            Table table = db.Table.Find(id);
-            db.Table.Remove(table);
-            db.SaveChanges();
+            //Table table = db.Table.Find(id);
+            //db.Table.Remove(table);
+            //db.SaveChanges();
+            Table table = cashierRepo.GetTable(id);
+            cashierRepo.RemoveTable(table);
             return RedirectToAction("Index");
         }
 
@@ -157,7 +175,7 @@ namespace CafeWebApp.Web.Controllers
         {
             if (disposing)
             {
-                db.Dispose();
+                //db.Dispose();
             }
             base.Dispose(disposing);
         }

@@ -1,4 +1,8 @@
-﻿@model CafeWebApp.Web.Models.Table
+﻿@model CafeWebApp.DomainModelEntity.Table
+
+@{
+    Layout = "~/Views/Shared/CashierLayout.cshtml";
+}
 
 @{
     ViewBag.Title = "Edit";
@@ -10,7 +14,7 @@
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
-    
+
     <div class="form-horizontal">
         <h4>Table</h4>
         <hr />
