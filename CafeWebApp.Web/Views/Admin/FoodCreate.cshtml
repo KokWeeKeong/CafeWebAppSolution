@@ -6,10 +6,10 @@
 <h2>FoodCreate</h2>
 
 
-@using (Html.BeginForm()) 
+@using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
-    
+
     <div class="form-horizontal">
         <h4>Food</h4>
         <hr />
@@ -25,7 +25,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.FoodName, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.FoodName, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.EditorFor(model => model.FoodName, new { htmlAttributes = new { @class = "form-control", @required = "required" } })
                 @Html.ValidationMessageFor(model => model.FoodName, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -33,7 +33,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.FoodPrice, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.FoodPrice, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.EditorFor(model => model.FoodPrice, new { htmlAttributes = new { @class = "form-control", @required = "required", min = 1, step = "0.01" } })
                 @Html.ValidationMessageFor(model => model.FoodPrice, "", new { @class = "text-danger" })
             </div>
         </div>
